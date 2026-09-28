@@ -36,3 +36,27 @@ Para copiar la clave pública al servidor podemos utilizar el comando ssh-copy-i
 
 A partir de ese momento, cuando nos conectemos mediante SSH, el servidor podrá comprobar nuestra identidad utilizando la clave pública y nosotros podremos autenticarnos con nuestra clave privada, sin tener que introducir la contraseña del usuario del servidor en cada conexión.
 
+
+**Configuracion de ip en ubuntu server**
+-Primero nos metemos en la terminal y no metemos en el directorio cd/etc/netpaln
+
+-Cuando ya estemos dentro vamos a editar el fichero 00-installer-config.yaml con el comando sudo nano y el nombre que he puesto anteriormente, es decir sudo nano 00-installer-config.yaml
+
+-Una vez dentro en mi caso he editado este fichero de esta menera con esta configuracion de red:
+
+network:
+    ethernets:
+        enp0s3:
+            dhcp4: false
+            addresses:
+              - 172.16.5.30/24
+            routes:
+              - to: default
+                via: 172.16.0.1
+            nameservers:
+                addresses: [8.8.8.8, 8.8.4.4]
+     version: 2
+
+-Cuando ya hayamos configurado todo guardamos los cambios y si lo hemos puesto todo bien ya tendríamos que tener conexion a internet 
+
+
