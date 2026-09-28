@@ -10,233 +10,29 @@ SSH (Secure Shell) es un protocolo que permite conectarse y administrar un equip
 
 
 **SSH y creacion de claves**
-SSH en Ubuntu Server
-1. ¿Qué es SSH?
+¿Qué es SSH?
+SSH (Secure Shell) es un protocolo que permite conectarse de forma segura a otro ordenador o servidor a través de una red. Se utiliza mucho para administrar servidores Linux de manera remota desde una terminal.
 
-SSH (Secure Shell) es un protocolo que permite conectarse y administrar un equipo de forma remota y segura mediante una terminal.
+Por ejemplo, si tenemos un Ubuntu Server en otra máquina, podemos conectarnos desde nuestro ordenador utilizando su dirección IP y un usuario. La conexión está cifrada, por lo que la información que se intercambia entre ambos equipos queda protegida.
 
-En este caso utilizaremos SSH para conectarnos desde un ordenador cliente a un Ubuntu Server.
+Para conectarnos mediante SSH normalmente utilizamos el comando ssh, seguido del nombre del usuario y la dirección IP del servidor. Por ejemplo: ssh usuario@192.168.1.100.
 
-┌──────────────┐                 ┌──────────────┐
-│    Cliente   │      SSH        │ Ubuntu Server│
-│              │ ──────────────► │              │
-│     ssh      │                 │     sshd     │
-└──────────────┘                 └──────────────┘
+Una de las formas más seguras de autenticarse en SSH es mediante un par de claves. Este par está formado por una clave privada y una clave pública. La clave privada se guarda en nuestro ordenador y nunca debemos compartirla. La clave pública, en cambio, se coloca en el servidor. Cuando intentamos conectarnos, SSH utiliza ambas claves para comprobar nuestra identidad.
 
+**Crear un par de claves SSH en Ubuntu Server**
+Para crear el par de claves utilizamos el comando ssh-keygen -t ed25519.
 
-Por defecto, SSH utiliza el puerto 22.
+Al ejecutarlo, Ubuntu nos preguntará dónde queremos guardar las claves. Si pulsamos Enter, se utilizará la ubicación predeterminada, normalmente /home/usuario/.ssh/.
 
-2. Instalar SSH en Ubuntu Server
+Después nos pedirá una passphrase, que es una contraseña adicional para proteger la clave privada. Es recomendable utilizar una, ya que añade una capa extra de seguridad.
 
-Primero actualizamos los paquetes:
+Una vez terminado el proceso, se crearán dos archivos:
 
-sudo apt update
+id_ed25519: es la clave privada. Debemos mantenerla protegida y nunca compartirla.
 
+id_ed25519.pub: es la clave pública. Esta es la que podemos copiar al servidor.
 
-Instalamos el servidor SSH:
+Para copiar la clave pública al servidor podemos utilizar el comando ssh-copy-id usuario@IP_DEL_SERVIDOR. Este comando añade nuestra clave pública al archivo de claves autorizadas del usuario en el servidor.
 
-sudo apt install openssh-server
-
-
-Comprobamos que el servicio está funcionando:
-
-sudo systemctl status ssh
-
-
-Si aparece:
-
-Active: active (running)
-
-
-significa que SSH está funcionando correctamente.
-
-También podemos hacer que se inicie automáticamente al arrancar el servidor:
-
-sudo systemctl enable ssh
-
-3. Conectarse al servidor
-
-Desde el ordenador cliente utilizamos:
-
-ssh usuario@IP_DEL_SERVIDOR
-
-
-Por ejemplo:
-
-ssh alumno@192.168.1.100
-
-
-La primera vez que nos conectemos puede aparecer un mensaje preguntando si confiamos en el servidor. Escribimos:
-
-yes
-
-
-Después se solicitará la contraseña del usuario.
-
-4. Configuración de SSH
-
-El archivo principal de configuración del servidor es:
-
-/etc/ssh/sshd_config
-
-
-Podemos editarlo con:
-
-sudo nano /etc/ssh/sshd_config
-
-
-Por ejemplo, podemos cambiar el puerto:
-
-Port 22
-
-
-por:
-
-Port 2222
-
-
-Después debemos comprobar que la configuración es correcta:
-
-sudo sshd -t
-
-
-Y reiniciar SSH:
-
-sudo systemctl restart ssh
-
-
-Si hemos cambiado el puerto, tendremos que indicarlo al conectarnos:
-
-ssh -p 2222 usuario@IP_DEL_SERVIDOR
-
-
-Para una práctica de clase, podemos mantener el puerto 22 para simplificar la configuración.
-
-5. Claves SSH
-
-SSH permite utilizar claves públicas y privadas para autenticarnos sin tener que introducir la contraseña del usuario cada vez.
-
-Tenemos dos claves:
-
-Clave privada
-
-Es la clave secreta.
-
-Se guarda en nuestro ordenador y no debemos compartirla.
-
-Por ejemplo:
-
-~/.ssh/id_ed25519
-
-Clave pública
-
-Es la clave que podemos copiar al servidor.
-
-Por ejemplo:
-
-~/.ssh/id_ed25519.pub
-
-
-La relación entre ambas es:
-
-       CLIENTE
-┌─────────────────────┐
-│                     │
-│  🔑 Clave privada   │
-│  🔓 Clave pública   │
-│                     │
-└──────────┬──────────┘
-           │
-           │ clave pública
-           ▼
-┌─────────────────────┐
-│    UBUNTU SERVER    │
-│                     │
-│  ~/.ssh/             │
-│  authorized_keys    │
-└─────────────────────┘
-
-
-La clave privada permanece en el cliente y la clave pública se instala en el servidor.
-
-6. Crear las claves
-
-En el ordenador cliente podemos crear un par de claves con:
-
-ssh-keygen -t ed25519
-
-
-El programa nos preguntará dónde guardar las claves.
-
-Podemos pulsar Enter para utilizar la ubicación predeterminada:
-
-~/.ssh/id_ed25519
-
-
-Se crearán dos archivos:
-
-id_ed25519
-id_ed25519.pub
-
-
-id_ed25519 → clave privada.
-
-id_ed25519.pub → clave pública.
-
-Es recomendable proteger la clave privada utilizando una passphrase.
-
-7. Copiar la clave pública al servidor
-
-Podemos copiar la clave pública utilizando:
-
-ssh-copy-id usuario@IP_DEL_SERVIDOR
-
-
-Por ejemplo:
-
-ssh-copy-id alumno@192.168.1.100
-
-
-La clave se guardará en el servidor dentro de:
-
-~/.ssh/authorized_keys
-
-
-A partir de ese momento podemos conectarnos:
-
-ssh alumno@192.168.1.100
-
-
-SSH utilizará nuestra clave para comprobar nuestra identidad.
-
-8. ¿Cómo funcionan las claves?
-
-El funcionamiento básico es:
-
-1. El cliente inicia la conexión
-              │
-              ▼
-2. El servidor comprueba si
-   existe una clave pública
-              │
-              ▼
-3. El cliente demuestra que
-   posee la clave privada
-              │
-              ▼
-4. El servidor verifica la prueba
-   utilizando la clave pública
-              │
-              ▼
-5. Usuario autenticado
-
-
-La clave privada nunca se envía al servidor.
-
-Por eso es muy importante protegerla y no compartirla.
-
-
-
-
-Clave pública → se copia al servidor.
+A partir de ese momento, cuando nos conectemos mediante SSH, el servidor podrá comprobar nuestra identidad utilizando la clave pública y nosotros podremos autenticarnos con nuestra clave privada, sin tener que introducir la contraseña del usuario del servidor en cada conexión.
 
