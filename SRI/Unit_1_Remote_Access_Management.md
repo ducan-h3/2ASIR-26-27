@@ -60,3 +60,16 @@ network:
 -Cuando ya hayamos configurado todo guardamos los cambios y si lo hemos puesto todo bien ya tendríamos que tener conexion a internet 
 
 
+**Acceso por ssh sin que te pida contraseña**
+
+En el cliente Ubuntu ejecutamos los siguientes comandos:
+
+ssh-keygen -t ed25519
+ssh-copy-id usuario@IP_SERVIDOR
+ssh usuario@IP_SERVIDOR
+
+La contraseña solo te la pedirá por ultima vez en ssh-copy-id. Después podrás entrar con:
+
+ssh usuario@IP_SERVIDOR sin que te pida la contraeña
+
+
