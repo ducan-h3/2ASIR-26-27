@@ -1,4 +1,20 @@
 **Instalacion y configuracion de servicio DHCP**
+Sí. En Ubuntu puedes instalar el servidor DHCP ISC DHCP desde la terminal así:
+
+1. Actualizar los paquetes
+sudo apt update
+
+2. Instalar DHCP
+sudo apt install isc-dhcp-server
+
+Cuando termine, comprueba el servicio:
+
+sudo systemctl status isc-dhcp-server
+
+Es posible que aparezca failed inicialmente. No pasa nada: normalmente es porque todavía no has configurado la interfaz y la red.
+
+
+
 Claro. Si estás configurando ISC DHCP Server en Ubuntu/Debian, hay dos archivos importantes:
 
 /etc/default/isc-dhcp-server → indica en qué interfaz escucha DHCP.
