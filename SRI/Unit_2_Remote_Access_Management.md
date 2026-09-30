@@ -45,13 +45,10 @@ Puedes poner, por ejemplo:
 
 authoritative;
 
-subnet 192.168.10.0 netmask 255.255.255.0 {
-    range 192.168.10.100 192.168.10.200;
-    option routers 192.168.10.1;
-    option subnet-mask 255.255.255.0;
-    option domain-name-servers 8.8.8.8, 1.1.1.1;
-    default-lease-time 600;
-    max-lease-time 7200;
+subnet 172.16.5.30 netmask 255.255.255.0 {
+range 172.16.0.0 172.31.255.255;
+default-lease-time 600;
+max-lease-time 7200;
 }
 
 Esto significa:
@@ -81,4 +78,4 @@ Si me pegas aquí el resultado de:
 
 ip a
 
-te puedo escribir el dhcpd.conf exacto para tu red, sin que tengas que adivinar las IP.
+
