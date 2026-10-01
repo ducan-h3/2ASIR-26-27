@@ -126,12 +126,12 @@ Pulsa Siguiente.
 
 3. Rango de IP
 
-Por ejemplo, vamos a repartir IPs desde la 192.168.1.100 hasta la 192.168.1.200.
+Por ejemplo, vamos a repartir IPs desde la 172.16.5.31 hasta la 172.16.5.231
 
 Pon:
 
-IP inicial: 192.168.1.100
-IP final: 192.168.1.200
+IP inicial: 172.16.5.31
+IP final: 172.16.5.231
 Longitud: 24
 Máscara: 255.255.255.0
 
@@ -178,7 +178,8 @@ Pon la IP de tu servidor DNS.
 
 Por ejemplo:
 
-192.168.1.10
+8.8.8.8
+8.8.4.4
 
 Pulsa Siguiente.
 
@@ -208,7 +209,7 @@ Red_LAN
 
 Dentro de Grupo de direcciones debería aparecer:
 
-192.168.1.100 - 192.168.1.200
+172.16.5.31
 
 Y los equipos que estén configurados para obtener la IP automáticamente recibirán una dirección de ese rango.
 
