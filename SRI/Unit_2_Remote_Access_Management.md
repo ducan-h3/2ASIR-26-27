@@ -106,35 +106,29 @@ Pulsa Confirmar.
 
 
 
+
 Ahora vamos a configurarlo
 
-Crear un ámbito DHCP en Windows Server
-
-Primero abre:
-
-Administrador del servidor → Herramientas → DHCP
-
-1. Abrir IPv4
-
-En la ventana de DHCP:
-
-Tu servidor → IPv4
-
-Haz clic derecho sobre IPv4 → Ámbito nuevo.
-
+1. Abrir DHCP
+Abre Administrador del servidor.
+Arriba, pulsa Herramientas.
+Entra en DHCP.
+Despliega el nombre de tu servidor.
+Haz clic derecho en IPv4.
+Pulsa Ámbito nuevo...
 2. Nombre del ámbito
 
-Pon un nombre, por ejemplo:
+Pon:
 
-Red_LAN
+Nombre: Red_LAN
 
 Pulsa Siguiente.
 
-3. Rango de direcciones IP
+3. Rango de IP
 
-Aquí indicamos las IP que DHCP va a repartir.
+Por ejemplo, vamos a repartir IPs desde la 192.168.1.100 hasta la 192.168.1.200.
 
-Por ejemplo:
+Pon:
 
 IP inicial: 192.168.1.100
 IP final: 192.168.1.200
@@ -145,28 +139,24 @@ Pulsa Siguiente.
 
 4. Exclusiones
 
-Aquí puedes indicar IP que no quieres que DHCP reparta.
+Aquí puedes reservar algunas IP para servidores, impresoras, etc.
 
-Por ejemplo, si quieres reservar las primeras IP para servidores:
+Por ejemplo:
 
-Inicial: 192.168.1.1
-Final: 192.168.1.20
+Inicio: 192.168.1.1
+Fin: 192.168.1.20
 
-Pulsa Agregar → Siguiente.
+Pulsa Agregar.
 
-Si no necesitas exclusiones, simplemente pulsa Siguiente.
+Si no necesitas reservar ninguna, pulsa directamente Siguiente.
 
-5. Duración de la concesión
+5. Duración
 
-Es el tiempo durante el que un equipo puede utilizar una IP.
-
-Puedes dejar el valor predeterminado:
-
-8 días
+Deja la opción que aparece por defecto.
 
 Pulsa Siguiente.
 
-6. Configurar opciones DHCP
+6. Configurar opciones
 
 Selecciona:
 
@@ -176,25 +166,25 @@ Pulsa Siguiente.
 
 7. Puerta de enlace
 
-Escribe la IP del router. Por ejemplo:
+Escribe la IP del router:
 
 192.168.1.1
 
 Pulsa Agregar → Siguiente.
 
-8. Servidor DNS
+8. DNS
 
-Pon la dirección IP de tu servidor DNS.
+Pon la IP de tu servidor DNS.
 
-Si el propio Windows Server tiene DNS:
+Por ejemplo:
 
 192.168.1.10
 
 Pulsa Siguiente.
 
-9. Servidor WINS
+9. WINS
 
-Puedes dejarlo vacío.
+No pongas nada.
 
 Pulsa Siguiente.
 
@@ -206,20 +196,19 @@ Sí, deseo activar este ámbito ahora
 
 Pulsa Siguiente → Finalizar.
 
-11. Comprobar
+11. Comprobar que funciona
 
-En DHCP debería aparecer:
+En DHCP → IPv4 aparecerá tu ámbito:
 
-IPv4
- └── Red_LAN
-      ├── Grupo de direcciones
-      ├── Concesiones de direcciones
-      ├── Reservas
-      └── Opciones de ámbito
+Red_LAN
+├── Grupo de direcciones
+├── Concesiones de direcciones
+├── Reservas
+└── Opciones de ámbito
 
-En Grupo de direcciones deberías ver:
+Dentro de Grupo de direcciones debería aparecer:
 
 192.168.1.100 - 192.168.1.200
 
-Importante: el servidor DHCP debe tener una IP fija, no una IP obtenida por DHCP.
+Y los equipos que estén configurados para obtener la IP automáticamente recibirán una dirección de ese rango.
 
