@@ -213,3 +213,6 @@ Dentro de Grupo de direcciones debería aparecer:
 
 Y los equipos que estén configurados para obtener la IP automáticamente recibirán una dirección de ese rango.
 
+
+**¿Puede haber en una red dos servidores DHCP?**
+Sí, sí puede haber dos o más servidores DHCP en una misma red, pero deben configurarse de forma correcta para evitar fallos
