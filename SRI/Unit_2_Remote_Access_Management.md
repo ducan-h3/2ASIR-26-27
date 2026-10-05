@@ -216,3 +216,66 @@ Y los equipos que estén configurados para obtener la IP automáticamente recibi
 
 **¿Puede haber en una red dos servidores DHCP?**
 Sí, sí puede haber dos o más servidores DHCP en una misma red, pero deben configurarse de forma correcta para evitar fallos
+
+
+
+**Archivo de configuracion del DHCP**
+El archivo /etc/dhcp/dhcpd.conf es el archivo de configuración principal del servidor DHCP (Dynamic Host Configuration Protocol) en sistemas operativos tipo Linux y Unix (usualmente del servidor de ISC DHCP).
+
+¿Para qué sirve?
+Sirve para definir las reglas y los parámetros con los que el servidor asignará direcciones IP y configuraciones de red de forma automática a los dispositivos (clientes) que se conecten a la red local.
+
+Componentes y parámetros que contiene habitualmente
+Aunque la imagen solo muestra la ruta del archivo, un archivo /etc/dhcp/dhcpd.conf típico contiene las siguientes secciones y directivas:
+
+1. Parámetros globales
+Aplican a todas las redes y dispositivos gestionados por el servidor a menos que se especifique lo contrario:
+
+default-lease-time: Tiempo (en segundos) que se concede una dirección IP a un dispositivo por defecto.
+
+max-lease-time: Tiempo máximo (en segundos) que un dispositivo puede mantener una IP asignada.
+
+option domain-name: Nombre del dominio local de la red (ejemplo: miempresa.local).
+
+option domain-name-servers: Direcciones IP de los servidores DNS que utilizarán los clientes para navegar por internet o resolver nombres.
+
+authoritative;: Indica que este servidor es la fuente principal de configuración DHCP para esa red.
+
+2. Declaración de subredes (subnet)
+Define el rango de direcciones IP disponible para una red específica:
+
+subnet y netmask: Especifican la red local y su máscara de subred (por ejemplo, subnet 192.168.1.0 netmask 255.255.255.0).
+
+range: Establece el rango de direcciones IP dinámicas que se entregarán automáticamente (por ejemplo, range 192.168.1.100 192.168.1.200;).
+
+option routers: Define la puerta de enlace predeterminada (Gateway o router principal) que usarán los clientes para salir a internet.
+
+option broadcast-address: Dirección de difusión de la subred.
+
+3. Reservas fijas por dispositivo (host)
+Permite asignar siempre la misma dirección IP a un dispositivo específico identificándolo por su dirección MAC física:
+
+host : Bloque para configurar un equipo concreto (ejemplo: un servidor de impresión o servidor web local).
+
+hardware ethernet: La dirección MAC de la tarjeta de red del dispositivo.
+
+fixed-address: La IP específica reservada para ese equipo.
+
+
+Ejemplo de estructura básica dentro del archivo:
+# Configuración global
+default-lease-time 600;
+max-lease-time 7200;
+option domain-name-servers 8.8.8.8, 8.8.4.4;
+
+# Configuración de subred
+subnet 192.168.1.0 netmask 255.255.255.0 {
+  range 192.168.1.50 192.168.1.150;
+  option routers 192.168.1.1;
+}
+
+# Reserva fija para un equipo específico
+host ServidorArchivos {
+  hardware ethernet 00:11:22:33:44:55;
+  fixed-address 192.168.1.10;
+}
