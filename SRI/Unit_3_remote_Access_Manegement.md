@@ -156,3 +156,20 @@ Aplica la configuración reiniciando el servicio:
 
 Bash
 sudo systemctl restart bind9
+
+
+Para probar que la resolución inversa está funcionando correctamente tras realizar los cambios, debes ejecutar la consulta desde la terminal del cliente.
+**Paso 1**
+.Ejecutar el comando dig inverso:En el cliente.Lanza la consulta inversa para comprobar la IP del equipo1:
+dig @172.16.5.30 -x 172.16.5.51
+Verificación: Comprueba que el campo status: en la cabecera muestre NOERROR en lugar de NXDOMAIN.
+
+**Paso 2**
+Verificar la respuesta
+Revisa la sección de respuesta (ANSWER SECTION) en la salida de la terminal.
+Verificación: Debe aparecer el registro PTR asociando la IP al nombre: 51.5.16.172.in-addr.arpa. IN PTR equipo1.midominio.local
+
+**Paso 3**
+Verificar el resto de equipos inversos
+dig @172.16.5.30 -x 172.16.5.52
+dig @172.16.5.30 -x 172.16.5.53
