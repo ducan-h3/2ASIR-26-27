@@ -112,3 +112,47 @@ Paso 15: Probar la resolución DNS localmente
 Bash
 dig @127.0.0.1 www.midominio.local
 Verificación: En la salida enviada por pantalla, busca la sección ANSWER SECTION. Deberá responder asignando la IP configurada (192.168.1.50).
+
+
+**Configuracion de zona inversa**
+**Paso 1**
+Modificar named.conf.local
+En el servidor
+Añade el bloque de la zona inversa al final del archivo /etc/bind/named.conf.local:
+
+Plaintext
+zone "5.16.172.in-addr.arpa" {
+    type master;
+    file "/etc/bind/zones/db.172.16.5";
+};
+Verificación: El archivo completo debe contener tanto la zona directa como la inversa. Guarda los cambios con Ctrl + O, Enter y sal con Ctrl + X.
+
+**Paso 2**
+Crear el archivo de zona inversa
+En el servidor
+Crea el archivo de registros inversos:
+
+Bash
+sudo nano /etc/bind/zones/db.172.16.5
+Y añade la siguiente estructura básica con los registros PTR para tus equipos:
+
+Plaintext
+$TTL 604800
+@   IN  SOA ns1.midominio.local. admin.midominio.local. (
+              3     ; Serial
+         604800     ; Refresh
+          86400     ; Retry
+        2419200     ; Expire
+         604800 )   ; Negative Cache TTL
+
+@   IN  NS  ns1.midominio.local.
+51  IN  PTR equipo1.midominio.local.
+52  IN  PTR equipo2.midominio.local.
+53  IN  PTR equipo3.midominio.local.
+**PASO 3**
+Reiniciar BIND9
+En el servidor
+Aplica la configuración reiniciando el servicio:
+
+Bash
+sudo systemctl restart bind9
