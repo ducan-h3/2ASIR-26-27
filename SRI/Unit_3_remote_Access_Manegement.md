@@ -173,3 +173,15 @@ Verificación: Debe aparecer el registro PTR asociando la IP al nombre: 51.5.16.
 Verificar el resto de equipos inversos
 dig @172.16.5.30 -x 172.16.5.52
 dig @172.16.5.30 -x 172.16.5.53
+
+
+**Regitro de dominio**
+
+<img width="1919" height="1041" alt="image" src="https://github.com/user-attachments/assets/10aa90fb-543f-43c6-8389-d63f925b9d11" />
+
+<img width="1919" height="996" alt="image" src="https://github.com/user-attachments/assets/61ab7951-5757-4a0e-a503-18e9c9254876" />
+
+
+
+
+
