@@ -183,5 +183,67 @@ dig @172.16.5.30 -x 172.16.5.53
 
 
 
+**1. Configuración de los Servidores DHCP
+Cada servidor gestiona su propia mitad del rango de la subred 172.16.6.0/24.
+
+Archivo de configuración: /etc/dhcp/dhcpd.conf
+
+Comandos de gestión:
+
+Bash
+# Validar la sintaxis del DHCP
+sudo dhcpd -t -cf /etc/dhcp/dhcpd.conf
+
+# Reiniciar el servicio DHCP
+sudo systemctl restart isc-dhcp-server
+
+# Ver las concesiones (leases) actuales
+sudo tail -f /var/lib/dhcp/dhcpd.leases
+2. Configuración de Servidores DNS (BIND9)
+Servidor 1 (Maestro - IP: 172.16.6.30)
+Archivo de configuración local (/etc/bind/named.conf.local):
+
+Plaintext
+zone "servidor1.local" {
+    type master;
+    file "/etc/bind/db.servidor1.local";
+    allow-transfer { 172.16.6.31; };
+    also-notify { 172.16.6.31; };
+};
+Servidor 2 (Esclavo - IP: 172.16.6.31)
+Archivo de configuración local (/etc/bind/named.conf.local):
+
+Plaintext
+zone "servidor1.local" {
+    type slave;
+    file "/var/cache/bind/db.servidor1.local";
+    masters { 172.16.6.30; };
+};
+Comandos de gestión y validación de DNS:
+
+Bash
+# Comprobar errores de sintaxis en BIND9
+sudo named-checkconf
+
+# Reiniciar el servicio DNS
+sudo systemctl restart bind9
+3. Comprobaciones y Pruebas Finales
+Verificar la resolución de nombres contra el servidor esclavo:
+
+Bash
+nslookup servidor1.local 172.16.6.31
+Comprobar los logs del sistema para ver las transferencias de zona:
+
+Bash
+sudo journalctl -u bind9 -e
+Renovar la IP en la máquina cliente:
+
+Bash
+sudo dhclient -r
+sudo dhclient
+ip a**
+
+
+
 
 
